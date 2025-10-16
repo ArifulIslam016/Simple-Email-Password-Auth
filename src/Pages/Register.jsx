@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification, updateCurrentUser, updateProfile } from "firebase/auth";
 import React, {  useState } from "react";
 import { auth } from "../firebase/firebase.init";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -16,6 +16,13 @@ const Register = () => {
     const email = e.target.email.value;
     const password = e.target.password.value;
     const isChecked=e.target.cheeckBox.checked;
+    const name= e.target.name.value;
+    const photoUrl=e.target.phototUrl.value;
+    const userProfile={
+      displayName: name,
+      photoUrl:photoUrl,
+      email:email
+    }
   
     const SpeacialCharecterSet = /^(?=.*[!@#$&]).+$/;
 
@@ -31,7 +38,8 @@ const Register = () => {
       .then((userInfo) => {
         console.log(userInfo);
         setStatus(true);
-        if(!userInfo.user.emailVerified){
+        updateProfile(auth.currentUser, userProfile)
+                      if(!userInfo.user.emailVerified){
                     alert("Please Verify Your Email")
                     sendEmailVerification(userInfo.user).then().catch(errr=>setError(errr.message))
                 }
@@ -57,6 +65,22 @@ const Register = () => {
           <div className="card-body">
             <form onSubmit={handleLogin}>
               <fieldset className="fieldset">
+                <label className="label">Name</label>
+                <input
+                required
+                  type="text"
+                  className="input"
+                  placeholder="Your Name"
+                  name="name"
+                />
+                <label className="label">Photo</label>
+                <input
+                required
+                  type="text"
+                  className="input"
+                  placeholder="Photo Url"
+                  name="phototUrl"
+                />
                 <label className="label">Email</label>
                 <input
                 required

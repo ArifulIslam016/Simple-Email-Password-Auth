@@ -18,7 +18,9 @@ const Login = () => {
         console.log(result.user);
         if(!result.user.emailVerified){
            
-            sendEmailVerification(result.user).then(()=> alert("Please Verify Your Email")).catch(errr=>setError(errr.message))
+            sendEmailVerification(result.user).then(()=> {alert("Please Verify Your Email")
+              return
+            }).catch(errr=>setError(errr.message))
         }
       }).catch((err) => {
         console.log(err);
